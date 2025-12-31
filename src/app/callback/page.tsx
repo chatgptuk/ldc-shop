@@ -1,10 +1,14 @@
 import { redirect } from "next/navigation";
 
-export async function GET(request: Request) {
-    const url = new URL(request.url);
-    const orderId = url.searchParams.get('out_trade_no');
+export default async function CallbackPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+    const params = await searchParams
+    const orderId = params.out_trade_no;
 
-    if (orderId) {
+    if (orderId && typeof orderId === 'string') {
         redirect(`/order/${orderId}`);
     }
 
