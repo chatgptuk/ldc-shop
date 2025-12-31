@@ -2,9 +2,15 @@
 
 > ⚠️ **警告 / WARNING** ⚠️
 > 
-> **本项目目前正在测试中，代码尚未稳定，请勿部署！**
+> **本项目 (Next.js 版本) 目前正在测试中，代码尚未稳定，请勿部署！**
 > 
-> **This project is currently under testing. The code is NOT stable. DO NOT deploy!**
+> **This project (Next.js Edition) is currently under testing. The code is NOT stable. DO NOT deploy!**
+>
+> ---
+> 
+> 🚀 **想要立即使用？请部署稳定版 (Cloudflare Workers 版)：**
+> 
+> **[点击查看稳定版部署指南 → `_legacy/README.md`](./_legacy/README.md)**
 
 ---
 
