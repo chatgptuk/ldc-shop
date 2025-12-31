@@ -10,7 +10,7 @@ A robust, serverless virtual goods shop built with **Next.js 16**, **Vercel Post
 
 ## 🚀 One-Click Deploy
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchatgptuk%2Fldc-shop&env=OAUTH_CLIENT_ID,OAUTH_CLIENT_SECRET,MERCHANT_ID,MERCHANT_KEY,ADMIN_USERS,NEXTAUTH_SECRET&envDescription=Get%20Linux%20DO%20Credentials%20from%20connect.linux.do%20and%20credit.linux.do&project-name=ldc-shop&repository-name=ldc-shop&demo-title=LDC%20Shop%20Demo&demo-description=A%20virtual%20goods%20shop%20integrated%20with%20Linux%20DO.&stores=[{"type":"postgres"}])
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchatgptuk%2Fldc-shop&env=OAUTH_CLIENT_ID,OAUTH_CLIENT_SECRET,MERCHANT_ID,MERCHANT_KEY,ADMIN_USERS,NEXTAUTH_SECRET&envDescription=Required%20Environment%20Variables%20for%20LDC%20Shop&project-name=ldc-shop&repository-name=ldc-shop&demo-title=LDC%20Shop&demo-description=Virtual%20Goods%20Shop&stores=[{"type":"postgres"}])
 
 Click the button above to deploy your own instance to Vercel.
 
