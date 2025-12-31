@@ -11,7 +11,14 @@ export default async function Home() {
   try {
     products = await getProducts();
   } catch (error: any) {
-    if (error.message?.includes('relation "products" does not exist')) {
+    const errorString = JSON.stringify(error);
+    const isTableMissing =
+      error.message?.includes('does not exist') ||
+      error.cause?.message?.includes('does not exist') ||
+      errorString.includes('42P01') || // PostgreSQL error code for undefined_table
+      errorString.includes('relation') && errorString.includes('does not exist');
+
+    if (isTableMissing) {
       console.log("Database initialized check: Table missing. Running inline migrations...");
       const { db } = await import("@/lib/db");
       const { sql } = await import("drizzle-orm");
