@@ -9,6 +9,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             authorization: "https://connect.linux.do/oauth2/authorize",
             token: "https://connect.linux.do/oauth2/token",
             userinfo: "https://connect.linux.do/api/user",
+            issuer: "https://connect.linux.do/",
             clientId: process.env.OAUTH_CLIENT_ID,
             clientSecret: process.env.OAUTH_CLIENT_SECRET,
             profile(profile) {
