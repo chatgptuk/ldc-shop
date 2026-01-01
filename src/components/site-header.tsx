@@ -5,7 +5,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
@@ -13,6 +12,7 @@ import {
 import { ShoppingBag, User } from "lucide-react"
 import { SignInButton } from "@/components/signin-button"
 import { SignOutButton } from "@/components/signout-button"
+import { HeaderNav, HeaderUserMenuItems, LanguageSwitcher } from "@/components/header-client-parts"
 
 export async function SiteHeader() {
     const session = await auth()
@@ -20,7 +20,7 @@ export async function SiteHeader() {
 
     // Check if admin (case-insensitive)
     const adminUsers = process.env.ADMIN_USERS?.toLowerCase().split(',') || []
-    const isAdmin = user?.username && adminUsers.includes(user.username.toLowerCase())
+    const isAdmin = user?.username && adminUsers.includes(user.username.toLowerCase()) || false
 
     return (
         <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -30,14 +30,11 @@ export async function SiteHeader() {
                         <ShoppingBag className="h-7 w-7 text-primary" />
                         <span className="inline-block font-bold text-xl tracking-tight">LDC Shop</span>
                     </Link>
-                    {isAdmin && (
-                        <Link href="/admin" className="flex items-center text-sm font-medium text-muted-foreground hover:text-primary">
-                            Admin
-                        </Link>
-                    )}
+                    <HeaderNav isAdmin={isAdmin} />
                 </div>
                 <div className="flex flex-1 items-center justify-end space-x-4">
-                    <nav className="flex items-center space-x-4">
+                    <nav className="flex items-center space-x-2">
+                        <LanguageSwitcher />
                         {user ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
@@ -56,14 +53,7 @@ export async function SiteHeader() {
                                         </div>
                                     </DropdownMenuLabel>
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/orders">My Orders</Link>
-                                    </DropdownMenuItem>
-                                    {isAdmin && (
-                                        <DropdownMenuItem asChild>
-                                            <Link href="/admin">Dashboard</Link>
-                                        </DropdownMenuItem>
-                                    )}
+                                    <HeaderUserMenuItems isAdmin={isAdmin} />
                                     <DropdownMenuSeparator />
                                     <SignOutButton />
                                 </DropdownMenuContent>

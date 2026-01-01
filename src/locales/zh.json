@@ -1,0 +1,129 @@
+{
+    "common": {
+        "appName": "LDC 商店",
+        "login": "使用 Linux DO 登录",
+        "logout": "退出登录",
+        "admin": "管理",
+        "dashboard": "控制台",
+        "myOrders": "我的订单",
+        "loading": "加载中...",
+        "error": "错误",
+        "success": "成功",
+        "cancel": "取消",
+        "confirm": "确认",
+        "save": "保存",
+        "delete": "删除",
+        "edit": "编辑",
+        "add": "添加",
+        "back": "返回",
+        "copy": "复制",
+        "copied": "已复制！",
+        "copyFailed": "复制失败",
+        "credits": "积分",
+        "inStock": "有货",
+        "outOfStock": "缺货",
+        "buyNow": "立即购买",
+        "processing": "处理中...",
+        "viewDetails": "查看详情"
+    },
+    "home": {
+        "title": "欢迎来到 LDC 商店",
+        "subtitle": "为 Linux DO 生态打造的虚拟商品商店",
+        "noProducts": "暂无商品",
+        "checkBackLater": "请稍后再来！"
+    },
+    "buy": {
+        "title": "商品详情",
+        "noDescription": "暂无描述",
+        "loginToBuy": "请登录后购买此商品",
+        "outOfStockMessage": "该商品暂时缺货"
+    },
+    "order": {
+        "title": "订单详情",
+        "product": "商品",
+        "amountPaid": "支付金额",
+        "createdAt": "创建时间",
+        "paidAt": "支付时间",
+        "yourContent": "您的内容",
+        "clickToCopy": "点击复制：",
+        "saveKeySecurely": "请妥善保管此密钥",
+        "loginToView": "请使用购买时使用的账号登录以查看内容",
+        "waitingPayment": "等待支付...",
+        "paymentReceived": "已收到付款，正在处理发货...",
+        "orderRefunded": "此订单已退款",
+        "status": {
+            "pending": "待支付",
+            "paid": "已支付",
+            "delivered": "已发货",
+            "refunded": "已退款"
+        }
+    },
+    "orders": {
+        "title": "我的订单",
+        "noOrders": "您还没有任何订单",
+        "browseProducts": "浏览商品"
+    },
+    "admin": {
+        "products": {
+            "title": "商品管理",
+            "addNew": "添加商品",
+            "name": "名称",
+            "price": "价格",
+            "category": "分类",
+            "stock": "库存",
+            "actions": "操作",
+            "manageCards": "卡密",
+            "confirmDelete": "确定要删除此商品吗？"
+        },
+        "orders": {
+            "title": "最近订单",
+            "orderId": "订单号",
+            "user": "用户",
+            "product": "商品",
+            "amount": "金额",
+            "status": "状态",
+            "cardKey": "卡密",
+            "date": "日期",
+            "actions": "操作",
+            "refund": "退款",
+            "markRefunded": "标记已退款",
+            "refundConfirm": "这将在新标签页中打开退款页面。步骤：1. 在新标签页中完成退款 2. 在 Linux DO Credit 后台确认退款成功 3. 返回此处点击【标记已退款】继续？",
+            "refundVerify": "您是否已在 Linux DO Credit 后台确认退款成功？",
+            "refundSuccess": "订单已标记为已退款",
+            "refundInfo": "确认退款成功后，点击【标记已退款】"
+        },
+        "cards": {
+            "title": "库存管理",
+            "addCards": "添加卡密",
+            "placeholder": "输入卡密，每行一个...",
+            "available": "可用",
+            "used": "已使用",
+            "noCards": "暂无卡密"
+        },
+        "productForm": {
+            "addTitle": "添加商品",
+            "editTitle": "编辑商品",
+            "nameLabel": "商品名称",
+            "namePlaceholder": "请输入商品名称",
+            "descLabel": "商品描述",
+            "descPlaceholder": "请输入商品描述",
+            "priceLabel": "价格（积分）",
+            "pricePlaceholder": "0.00",
+            "categoryLabel": "分类",
+            "categoryPlaceholder": "通用",
+            "imageLabel": "图片地址",
+            "imagePlaceholder": "https://...",
+            "saveButton": "保存商品",
+            "saving": "保存中..."
+        }
+    },
+    "footer": {
+        "disclaimer": "为 Linux DO 生态打造，非官方服务",
+        "poweredBy": "技术支持"
+    },
+    "language": {
+        "switch": "语言",
+        "en": "English",
+        "zh": "中文"
+    }
+}

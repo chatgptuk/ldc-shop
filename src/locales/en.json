@@ -1,0 +1,129 @@
+{
+    "common": {
+        "appName": "LDC Shop",
+        "login": "Sign in with Linux DO",
+        "logout": "Log out",
+        "admin": "Admin",
+        "dashboard": "Dashboard",
+        "myOrders": "My Orders",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "add": "Add",
+        "back": "Back",
+        "copy": "Copy",
+        "copied": "Copied!",
+        "copyFailed": "Copy failed",
+        "credits": "Credits",
+        "inStock": "in stock",
+        "outOfStock": "Out of Stock",
+        "buyNow": "Buy Now",
+        "processing": "Processing...",
+        "viewDetails": "View Details"
+    },
+    "home": {
+        "title": "Welcome to LDC Shop",
+        "subtitle": "A virtual goods shop for the Linux DO ecosystem",
+        "noProducts": "No products available yet.",
+        "checkBackLater": "Check back later!"
+    },
+    "buy": {
+        "title": "Product Details",
+        "noDescription": "No description available.",
+        "loginToBuy": "Please sign in to purchase this product.",
+        "outOfStockMessage": "This product is currently out of stock."
+    },
+    "order": {
+        "title": "Order Details",
+        "product": "Product",
+        "amountPaid": "Amount Paid",
+        "createdAt": "Created At",
+        "paidAt": "Paid At",
+        "yourContent": "Your Content",
+        "clickToCopy": "Click to copy:",
+        "saveKeySecurely": "Please save this key securely.",
+        "loginToView": "Please login with the account used to purchase to view the content.",
+        "waitingPayment": "Waiting for payment...",
+        "paymentReceived": "Payment received. Processing delivery...",
+        "orderRefunded": "This order has been refunded.",
+        "status": {
+            "pending": "Pending",
+            "paid": "Paid",
+            "delivered": "Delivered",
+            "refunded": "Refunded"
+        }
+    },
+    "orders": {
+        "title": "My Orders",
+        "noOrders": "You haven't placed any orders yet.",
+        "browseProducts": "Browse Products"
+    },
+    "admin": {
+        "products": {
+            "title": "Products",
+            "addNew": "Add Product",
+            "name": "Name",
+            "price": "Price",
+            "category": "Category",
+            "stock": "Stock",
+            "actions": "Actions",
+            "manageCards": "Cards",
+            "confirmDelete": "Are you sure you want to delete this product?"
+        },
+        "orders": {
+            "title": "Recent Orders",
+            "orderId": "Order ID",
+            "user": "User",
+            "product": "Product",
+            "amount": "Amount",
+            "status": "Status",
+            "cardKey": "Card Key",
+            "date": "Date",
+            "actions": "Actions",
+            "refund": "Refund",
+            "markRefunded": "Mark Refunded",
+            "refundConfirm": "This will open the refund page in a new tab.\n\nSteps:\n1. Complete the refund in the new tab\n2. Verify success in Linux DO Credit dashboard\n3. Return here and click \"Mark Refunded\"\n\nContinue?",
+            "refundVerify": "Have you verified the refund was successful in the Linux DO Credit dashboard?",
+            "refundSuccess": "Order marked as refunded",
+            "refundInfo": "After verifying the refund was successful, click 'Mark Refunded'"
+        },
+        "cards": {
+            "title": "Manage Stock",
+            "addCards": "Add Cards",
+            "placeholder": "Enter card keys, one per line...",
+            "available": "Available",
+            "used": "Used",
+            "noCards": "No cards added yet."
+        },
+        "productForm": {
+            "addTitle": "Add New Product",
+            "editTitle": "Edit Product",
+            "nameLabel": "Product Name",
+            "namePlaceholder": "Enter product name",
+            "descLabel": "Description",
+            "descPlaceholder": "Enter product description",
+            "priceLabel": "Price (Credits)",
+            "pricePlaceholder": "0.00",
+            "categoryLabel": "Category",
+            "categoryPlaceholder": "general",
+            "imageLabel": "Image URL",
+            "imagePlaceholder": "https://...",
+            "saveButton": "Save Product",
+            "saving": "Saving..."
+        }
+    },
+    "footer": {
+        "disclaimer": "Built for Linux DO ecosystem. Not an official Linux DO service.",
+        "poweredBy": "Powered by"
+    },
+    "language": {
+        "switch": "Language",
+        "en": "English",
+        "zh": "中文"
+    }
+}
