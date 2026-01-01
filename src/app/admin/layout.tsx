@@ -9,7 +9,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     const user = session?.user
 
     // Admin Check
-    if (!user || !user.username || !process.env.ADMIN_USERS?.split(',').includes(user.username)) {
+    const adminUsers = process.env.ADMIN_USERS?.toLowerCase().split(',') || []
+    if (!user || !user.username || !adminUsers.includes(user.username.toLowerCase())) {
         return notFound() // or redirect to login
     }
 

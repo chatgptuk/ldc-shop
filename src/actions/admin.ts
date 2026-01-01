@@ -11,7 +11,8 @@ import { revalidatePath } from "next/cache"
 export async function checkAdmin() {
     const session = await auth()
     const user = session?.user
-    if (!user || !user.username || !process.env.ADMIN_USERS?.split(',').includes(user.username)) {
+    const adminUsers = process.env.ADMIN_USERS?.toLowerCase().split(',') || []
+    if (!user || !user.username || !adminUsers.includes(user.username.toLowerCase())) {
         throw new Error("Unauthorized")
     }
 }

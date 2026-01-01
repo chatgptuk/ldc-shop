@@ -16,8 +16,9 @@ export async function SiteHeader() {
     const session = await auth()
     const user = session?.user
 
-    // Check if admin (simple check, robust check should compare with specific emails/usernames in env)
-    const isAdmin = user?.username && process.env.ADMIN_USERS?.split(',').includes(user.username)
+    // Check if admin (case-insensitive)
+    const adminUsers = process.env.ADMIN_USERS?.toLowerCase().split(',') || []
+    const isAdmin = user?.username && adminUsers.includes(user.username.toLowerCase())
 
     return (
         <header className="sticky top-0 z-40 w-full border-b bg-background">
