@@ -103,11 +103,13 @@ export function OrderContent({ order, canViewKey }: OrderContentProps) {
                                     <div className="h-2 w-2 rounded-full bg-green-500" />
                                     {t('order.yourContent')}
                                 </h3>
-                                <div className="p-4 bg-slate-950 text-slate-50 font-mono rounded-lg break-all">
+                                <div className="relative p-4 bg-slate-950 text-slate-50 font-mono rounded-lg break-all whitespace-pre-wrap pr-12">
                                     {order.cardKey}
+                                    <div className="absolute top-2 right-2">
+                                        <CopyButton text={order.cardKey || ''} iconOnly />
+                                    </div>
                                 </div>
-                                <CopyButton text={order.cardKey || ''} label={t('order.clickToCopy')} />
-                                <p className="text-xs text-muted-foreground">
+                                <p className="text-xs text-muted-foreground mt-2">
                                     {t('order.saveKeySecurely')}
                                 </p>
                             </div>

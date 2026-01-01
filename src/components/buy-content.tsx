@@ -57,7 +57,7 @@ export function BuyContent({ product, stockCount, isLoggedIn }: BuyContentProps)
                                 className="max-w-full max-h-full object-contain"
                             />
                         </div>
-                        <p className="text-muted-foreground leading-relaxed">
+                        <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap break-words">
                             {product.description || t('buy.noDescription')}
                         </p>
                     </CardContent>

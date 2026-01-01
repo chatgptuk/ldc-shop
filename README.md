@@ -41,6 +41,47 @@ During the deployment process, you will be asked for the following environment v
 
 The database (Vercel Postgres) will be automatically provisioned and linked.
 
+## 🇨🇳 中文说明
+
+### ⚠️ 关于退款拦截问题 (Refund WAF Issue)
+
+Linux DO Credit 的退款 API 受到 Cloudflare WAF 的严格保护，直接从服务器端发起请求可能会被拦截（报错 403 Forbidden）。
+
+**目前的临时解决方案：**
+本项目采用了**客户端 API 调用方案**（通过 Form 表单提交）。当管理员点击退款按钮时，会打开新标签页并由浏览器直接调用 Linux DO Credit 的退款 API。管理员需确认 API 返回成功后，返回本系统点击"标记已退款"来更新订单状态。
+
+### ⚙️ 配置指南 (Configuration Guide)
+
+部署时需要配置以下环境变量。
+
+> **⚠️ 注意 / NOTE**: 
+> 以下配置以域名 `store.chatgpt.org.uk` 为例，**部署时请务必替换为你自己的实际域名！**
+> Please replace `store.chatgpt.org.uk` with your actual domain!
+
+#### 1. Linux DO Connect (OIDC) 配置
+前往 [connect.linux.do](https://connect.linux.do) 创建/配置应用：
+
+*   **应用名称 (App Name)**: `LDC Store Next` (或任意名称 / Any name)
+*   **应用主页 (App Homepage)**: `https://store.chatgpt.org.uk`
+*   **应用描述 (App Description)**: `LDC Store Next`
+*   **回调地址 (Callback URL)**: `https://store.chatgpt.org.uk/api/auth/callback/linuxdo`
+
+获取 **Client ID** 和 **Client Secret**，分别填入 Vercel 环境变量的 `OAUTH_CLIENT_ID` 和 `OAUTH_CLIENT_SECRET`。
+
+#### 2. EPay (Linux DO Credit) 配置
+前往 [credit.linux.do](https://credit.linux.do) 创建/配置应用：
+
+*   **应用名称**: `LDC Store Next` (或任意名称 / Any name)
+*   **应用地址**: `https://store.chatgpt.org.uk`
+*   **回调 URI**: `https://store.chatgpt.org.uk/callback`
+*   **通知 URL**: `https://store.chatgpt.org.uk/api/notify`
+
+获取 **Client ID** 和 **Client Secret**，分别填入 Vercel 环境变量的 `MERCHANT_ID` 和 `MERCHANT_KEY`。
+
+#### 3. 其他变量
+*   **ADMIN_USERS**: 管理员用户名，逗号分隔，例如 `chatgpt`
+*   **NEXT_PUBLIC_APP_URL**: 你的应用完整域名，例如 `https://store.chatgpt.org.uk`
+
 ## 🛠️ Local Development
 
 1.  Clone the repository.

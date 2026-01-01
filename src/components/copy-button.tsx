@@ -11,9 +11,10 @@ interface CopyButtonProps {
     label?: string
     truncate?: boolean
     maxLength?: number
+    iconOnly?: boolean
 }
 
-export function CopyButton({ text, label, truncate = false, maxLength = 20 }: CopyButtonProps) {
+export function CopyButton({ text, label, truncate = false, maxLength = 20, ...props }: CopyButtonProps) {
     const [copied, setCopied] = useState(false)
     const { t } = useI18n()
 
@@ -32,10 +33,27 @@ export function CopyButton({ text, label, truncate = false, maxLength = 20 }: Co
         ? `${text.substring(0, maxLength)}...`
         : text
 
+    if (props.iconOnly) {
+        return (
+            <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleCopy}
+                className="h-8 w-8 p-0 hover:bg-muted/20"
+            >
+                {copied ? (
+                    <Check className="h-4 w-4 text-green-500" />
+                ) : (
+                    <Copy className="h-4 w-4" />
+                )}
+            </Button>
+        )
+    }
+
     return (
         <div className="flex items-center gap-2">
             {label && <span className="text-muted-foreground">{label}</span>}
-            <code className="bg-muted px-2 py-1 rounded text-sm font-mono">
+            <code className="bg-muted px-2 py-1 rounded text-sm font-mono break-all whitespace-pre-wrap">
                 {displayText}
             </code>
             <Button
