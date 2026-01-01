@@ -14,6 +14,7 @@ interface Product {
     image: string | null
     category: string | null
     stockCount: number
+    soldCount: number
 }
 
 export function HomeContent({ products }: { products: Product[] }) {
@@ -63,9 +64,14 @@ export function HomeContent({ products }: { products: Product[] }) {
                                     <span className="text-muted-foreground ml-1">{t('common.credits')}</span>
                                 </div>
                                 <div className="flex flex-col items-end gap-1">
-                                    <Badge variant={product.stockCount > 0 ? "secondary" : "destructive"}>
-                                        {product.stockCount > 0 ? `${product.stockCount} ${t('common.inStock')}` : t('common.outOfStock')}
-                                    </Badge>
+                                    <div className="flex gap-2">
+                                        <Badge variant="outline" className="text-muted-foreground">
+                                            {t('common.sold')}: {product.soldCount}
+                                        </Badge>
+                                        <Badge variant={product.stockCount > 0 ? "secondary" : "destructive"}>
+                                            {product.stockCount > 0 ? `${product.stockCount} ${t('common.inStock')}` : t('common.outOfStock')}
+                                        </Badge>
+                                    </div>
                                     <Link href={`/buy/${product.id}`}>
                                         <Button size="sm">{t('common.viewDetails')}</Button>
                                     </Link>

@@ -26,6 +26,7 @@
         "credits": "Credits",
         "inStock": "in stock",
         "outOfStock": "Out of Stock",
+        "sold": "Sold",
         "buyNow": "Buy Now",
         "processing": "Processing...",
         "viewDetails": "View Details"

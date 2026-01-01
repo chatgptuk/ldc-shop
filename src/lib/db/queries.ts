@@ -10,7 +10,8 @@ export async function getProducts() {
         price: products.price,
         image: products.image,
         category: products.category,
-        stock: sql<number>`count(case when ${cards.isUsed} = false then 1 end)::int`
+        stock: sql<number>`count(case when ${cards.isUsed} = false then 1 end)::int`,
+        sold: sql<number>`count(case when ${cards.isUsed} = true then 1 end)::int`
     })
         .from(products)
         .leftJoin(cards, eq(products.id, cards.productId))

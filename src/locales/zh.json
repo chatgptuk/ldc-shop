@@ -26,6 +26,7 @@
         "credits": "积分",
         "inStock": "有货",
         "outOfStock": "缺货",
+        "sold": "已售",
         "buyNow": "立即购买",
         "processing": "处理中...",
         "viewDetails": "查看详情"

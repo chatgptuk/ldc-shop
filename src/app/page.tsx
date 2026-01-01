@@ -61,5 +61,9 @@ export default async function Home() {
     }
   }
 
-  return <HomeContent products={products} />;
+  return <HomeContent products={products.map(p => ({
+    ...p,
+    stockCount: p.stock,
+    soldCount: p.sold || 0
+  }))} />;
 }
