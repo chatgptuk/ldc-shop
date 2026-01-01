@@ -37,10 +37,13 @@ export async function refundOrder(orderId: string) {
         pid: process.env.MERCHANT_ID!,
         key: process.env.MERCHANT_KEY!,
         trade_no: order.tradeNo,
-        money: order.amount
+        out_trade_no: order.orderId,
+        money: Number(order.amount).toFixed(2) // Must match original amount with 2 decimal places
     }
 
-    const resp = await fetch(process.env.REFUND_URL || 'https://credit.linux.do/epay/api.php', {
+    console.log("[Refund] Calling API with params:", JSON.stringify(params))
+
+    const resp = await fetch('https://credit.linux.do/epay/api.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
