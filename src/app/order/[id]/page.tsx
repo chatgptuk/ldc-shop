@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator"
 import { cookies } from "next/headers"
 import { CreditCard, Package, Clock, Copy, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { CopyButton } from "@/components/copy-button"
 
 export default async function OrderPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -98,9 +99,10 @@ export default async function OrderPage({ params }: { params: Promise<{ id: stri
                                     <div className="h-2 w-2 rounded-full bg-green-500" />
                                     Your Content
                                 </h3>
-                                <div className="p-4 bg-slate-950 text-slate-50 font-mono rounded-lg break-all relative group">
+                                <div className="p-4 bg-slate-950 text-slate-50 font-mono rounded-lg break-all">
                                     {order.cardKey}
                                 </div>
+                                <CopyButton text={order.cardKey || ''} label="Click to copy:" />
                                 <p className="text-xs text-muted-foreground">
                                     Please save this key securely.
                                 </p>

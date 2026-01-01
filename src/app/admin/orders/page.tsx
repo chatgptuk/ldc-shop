@@ -5,6 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { RefundButton } from "@/components/admin/refund-button"
+import { CopyButton } from "@/components/copy-button"
 
 export default async function AdminOrdersPage() {
     const allOrders = await db.query.orders.findMany({
@@ -27,6 +28,7 @@ export default async function AdminOrdersPage() {
                             <TableHead>Product</TableHead>
                             <TableHead>Amount</TableHead>
                             <TableHead>Status</TableHead>
+                            <TableHead>Card Key</TableHead>
                             <TableHead>Date</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
@@ -51,6 +53,13 @@ export default async function AdminOrdersPage() {
                                     } className="uppercase text-xs">
                                         {order.status}
                                     </Badge>
+                                </TableCell>
+                                <TableCell>
+                                    {order.cardKey ? (
+                                        <CopyButton text={order.cardKey} truncate maxLength={15} />
+                                    ) : (
+                                        <span className="text-muted-foreground">-</span>
+                                    )}
                                 </TableCell>
                                 <TableCell className="text-muted-foreground text-xs">
                                     {order.createdAt ? new Date(order.createdAt).toLocaleString() : ''}
