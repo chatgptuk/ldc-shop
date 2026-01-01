@@ -28,6 +28,7 @@ export default async function Home() {
           price DECIMAL(10, 2) NOT NULL,
           category TEXT,
           image TEXT,
+          is_active BOOLEAN DEFAULT TRUE,
           created_at TIMESTAMP DEFAULT NOW()
         );
         CREATE TABLE IF NOT EXISTS cards (
@@ -53,6 +54,8 @@ export default async function Home() {
           username TEXT,
           created_at TIMESTAMP DEFAULT NOW()
         );
+        -- Add is_active column if missing (for existing databases)
+        ALTER TABLE products ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;
       `);
 
       products = await getActiveProducts();

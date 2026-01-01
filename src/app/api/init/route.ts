@@ -1,23 +1,49 @@
 import { db } from "@/lib/db";
-import { migrate } from "drizzle-orm/vercel-postgres/migrator";
+import { sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
-import path from "path";
 
 export async function GET() {
     try {
-        // This will run migrations from the /drizzle folder (relative to project root in deployment?)
-        // Note: In Vercel, we need to ensure the migration files are included in the build output.
-        // They usually are if they are in the project root or src. 
-        // We configured output to "./lib/db/migrations" in drizzle.config.ts.
-        // Let's verify where they are.
-
-        // Changing standard to 'src/lib/db/migrations' matches config? 
-        // Wait, let's adjust config to be standard 'drizzle' folder in root for simplicity?
-        // No, let's stick to config but point correctly.
-
-        // Attempt migration
-        // For Vercel Postgres, we use the specific migrator
-        await migrate(db, { migrationsFolder: path.join(process.cwd(), "lib/db/migrations") });
+        // Run schema migrations directly
+        await db.execute(sql`
+            -- Create tables if not exist
+            CREATE TABLE IF NOT EXISTS products (
+                id TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                description TEXT,
+                price DECIMAL(10, 2) NOT NULL,
+                category TEXT,
+                image TEXT,
+                is_active BOOLEAN DEFAULT TRUE,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE TABLE IF NOT EXISTS cards (
+                id SERIAL PRIMARY KEY,
+                product_id TEXT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+                card_key TEXT NOT NULL,
+                is_used BOOLEAN DEFAULT FALSE,
+                used_at TIMESTAMP,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE TABLE IF NOT EXISTS orders (
+                order_id TEXT PRIMARY KEY,
+                product_id TEXT NOT NULL,
+                product_name TEXT NOT NULL,
+                amount DECIMAL(10, 2) NOT NULL,
+                email TEXT,
+                status TEXT DEFAULT 'pending',
+                trade_no TEXT,
+                card_key TEXT,
+                paid_at TIMESTAMP,
+                delivered_at TIMESTAMP,
+                user_id TEXT,
+                username TEXT,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            
+            -- Add missing columns for existing databases
+            ALTER TABLE products ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;
+        `);
 
         return NextResponse.json({ success: true, message: "Database initialized successfully" });
     } catch (error: any) {
@@ -25,3 +51,4 @@ export async function GET() {
         return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 }
+
