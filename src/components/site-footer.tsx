@@ -14,7 +14,7 @@ export function SiteFooter() {
                     </p>
                 </div>
                 <a href="https://chatgpt.org.uk" target="_blank" rel="noreferrer" className="text-center text-sm md:text-left text-muted-foreground hover:underline">
-                    {t('footer.poweredBy')} chatgpt.org.uk
+                    {t('footer.poweredBy')}
                 </a>
             </div>
         </footer>

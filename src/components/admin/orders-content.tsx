@@ -61,7 +61,18 @@ export function AdminOrdersContent({ orders }: { orders: Order[] }) {
                                 <TableCell className="font-mono text-xs">{order.orderId}</TableCell>
                                 <TableCell>
                                     <div className="flex flex-col">
-                                        <span className="font-medium text-sm">{order.username || 'Guest'}</span>
+                                        {order.username ? (
+                                            <a
+                                                href={`https://linux.do/u/${order.username}`}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="font-medium text-sm hover:underline text-primary"
+                                            >
+                                                {order.username}
+                                            </a>
+                                        ) : (
+                                            <span className="font-medium text-sm">Guest</span>
+                                        )}
                                         <span className="text-xs text-muted-foreground">{order.email}</span>
                                     </div>
                                 </TableCell>
