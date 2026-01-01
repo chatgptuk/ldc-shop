@@ -4,10 +4,11 @@ import { useI18n } from "@/lib/i18n/context"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { addCards } from "@/actions/admin"
+import { addCards, deleteCard } from "@/actions/admin"
 import { Badge } from "@/components/ui/badge"
 import { toast } from "sonner"
 import { CopyButton } from "@/components/copy-button"
+import { Trash2 } from "lucide-react"
 
 interface CardData {
     id: number
@@ -67,8 +68,25 @@ export function CardsContent({ productId, productName, unusedCards }: CardsConte
                             <div className="text-center py-10 text-muted-foreground text-sm">{t('admin.cards.noCards')}</div>
                         ) : (
                             unusedCards.map(c => (
-                                <div key={c.id} className="flex items-center justify-between p-2 rounded bg-muted/40 text-sm font-mono">
+                                <div key={c.id} className="flex items-center justify-between p-2 rounded bg-muted/40 text-sm font-mono gap-2">
                                     <CopyButton text={c.cardKey} truncate maxLength={30} />
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-7 w-7 text-destructive hover:text-destructive hover:bg-destructive/10"
+                                        onClick={async () => {
+                                            if (confirm(t('common.confirm') + '?')) {
+                                                try {
+                                                    await deleteCard(c.id)
+                                                    toast.success(t('common.success'))
+                                                } catch (e: any) {
+                                                    toast.error(e.message)
+                                                }
+                                            }
+                                        }}
+                                    >
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
                                 </div>
                             ))
                         )}

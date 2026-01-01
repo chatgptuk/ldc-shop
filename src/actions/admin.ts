@@ -63,3 +63,25 @@ export async function addCards(formData: FormData) {
     revalidatePath('/admin')
     revalidatePath('/')
 }
+
+export async function deleteCard(cardId: number) {
+    await checkAdmin()
+
+    // Only delete unused cards
+    const card = await db.query.cards.findFirst({
+        where: eq(cards.id, cardId)
+    })
+
+    if (!card) {
+        throw new Error("Card not found")
+    }
+
+    if (card.isUsed) {
+        throw new Error("Cannot delete used card")
+    }
+
+    await db.delete(cards).where(eq(cards.id, cardId))
+
+    revalidatePath('/admin')
+    revalidatePath('/')
+}
