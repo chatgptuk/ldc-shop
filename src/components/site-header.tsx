@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ShoppingBag, User } from "lucide-react"
 import { SignInButton } from "@/components/signin-button"
+import { SignOutButton } from "@/components/signout-button"
 
 export async function SiteHeader() {
     const session = await auth()
@@ -64,9 +65,7 @@ export async function SiteHeader() {
                                         </DropdownMenuItem>
                                     )}
                                     <DropdownMenuSeparator />
-                                    <DropdownMenuItem asChild>
-                                        <Link href="/api/auth/signout">Log out</Link>
-                                    </DropdownMenuItem>
+                                    <SignOutButton />
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         ) : (
