@@ -7,9 +7,10 @@ export function SiteFooter() {
                         Built for Linux DO ecosystem. Not an official Linux DO service.
                     </p>
                 </div>
-                <a href="https://chatgpt.org.uk" target="_blank" rel="noreferrer" className="text-center text-sm md:text-left text-muted-foreground hover:underline">Powered by chatgpt.org.uk</a>
-            </p>
-        </div>
-        </footer >
+                <a href="https://chatgpt.org.uk" target="_blank" rel="noreferrer" className="text-center text-sm md:text-left text-muted-foreground hover:underline">
+                    Powered by chatgpt.org.uk
+                </a>
+            </div>
+        </footer>
     )
 }
