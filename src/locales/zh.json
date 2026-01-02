@@ -71,6 +71,12 @@
         "browseProducts": "浏览商品"
     },
     "admin": {
+        "stats": {
+            "today": "今日",
+            "week": "近7天",
+            "month": "本月",
+            "total": "总计"
+        },
         "products": {
             "title": "商品管理",
             "addNew": "添加商品",
@@ -78,6 +84,7 @@
             "price": "价格",
             "category": "分类",
             "stock": "库存",
+            "order": "排序",
             "status": "状态",
             "active": "上架",
             "inactive": "下架",

@@ -54,8 +54,9 @@ export default async function Home() {
           username TEXT,
           created_at TIMESTAMP DEFAULT NOW()
         );
-        -- Add is_active column if missing (for existing databases)
+        -- Add columns if missing (for existing databases)
         ALTER TABLE products ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;
+        ALTER TABLE products ADD COLUMN IF NOT EXISTS sort_order INTEGER DEFAULT 0;
       `);
 
       products = await getActiveProducts();

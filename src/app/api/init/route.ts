@@ -43,6 +43,7 @@ export async function GET() {
             
             -- Add missing columns for existing databases
             ALTER TABLE products ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE;
+            ALTER TABLE products ADD COLUMN IF NOT EXISTS sort_order INTEGER DEFAULT 0;
         `);
 
         return NextResponse.json({ success: true, message: "Database initialized successfully" });

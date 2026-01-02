@@ -1,9 +1,12 @@
 import { db } from "@/lib/db"
-import { getProducts } from "@/lib/db/queries"
+import { getProducts, getDashboardStats } from "@/lib/db/queries"
 import { AdminProductsContent } from "@/components/admin/products-content"
 
 export default async function AdminPage() {
-    const products = await getProducts()
+    const [products, stats] = await Promise.all([
+        getProducts(),
+        getDashboardStats()
+    ])
 
     return (
         <AdminProductsContent
@@ -13,8 +16,11 @@ export default async function AdminPage() {
                 price: p.price,
                 category: p.category,
                 stockCount: p.stock,
-                isActive: p.isActive ?? true
+                isActive: p.isActive ?? true,
+                sortOrder: p.sortOrder ?? 0
             }))}
+            stats={stats}
         />
     )
 }
+

@@ -52,6 +52,13 @@ export async function toggleProductStatus(id: string, isActive: boolean) {
     revalidatePath('/')
 }
 
+export async function reorderProduct(id: string, newOrder: number) {
+    await checkAdmin()
+    await db.update(products).set({ sortOrder: newOrder }).where(eq(products.id, id))
+    revalidatePath('/admin')
+    revalidatePath('/')
+}
+
 export async function addCards(formData: FormData) {
     await checkAdmin()
     const productId = formData.get('product_id') as string

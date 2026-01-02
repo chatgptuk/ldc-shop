@@ -71,6 +71,12 @@
         "browseProducts": "Browse Products"
     },
     "admin": {
+        "stats": {
+            "today": "Today",
+            "week": "Last 7 Days",
+            "month": "This Month",
+            "total": "Total"
+        },
         "products": {
             "title": "Products",
             "addNew": "Add Product",
@@ -78,6 +84,7 @@
             "price": "Price",
             "category": "Category",
             "stock": "Stock",
+            "order": "Order",
             "status": "Status",
             "active": "Active",
             "inactive": "Inactive",
