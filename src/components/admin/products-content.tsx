@@ -66,9 +66,9 @@ export function AdminProductsContent({ products, stats }: AdminProductsContentPr
         const target = products[targetIdx]
 
         try {
-            // Swap sort orders
-            await reorderProduct(current.id, target.sortOrder)
-            await reorderProduct(target.id, current.sortOrder)
+            // Use index as sortOrder to ensure unique values
+            await reorderProduct(current.id, targetIdx)
+            await reorderProduct(target.id, idx)
             toast.success(t('common.success'))
         } catch (e: any) {
             toast.error(e.message)
