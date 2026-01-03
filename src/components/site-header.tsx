@@ -23,12 +23,14 @@ export async function SiteHeader() {
     const isAdmin = user?.username && adminUsers.includes(user.username.toLowerCase()) || false
 
     return (
-        <header className="sticky top-0 z-40 w-full border-b bg-background">
+        <header className="sticky top-0 z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
             <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
                 <div className="flex gap-6 md:gap-10">
-                    <Link href="/" className="flex items-center gap-1.5">
-                        <ShoppingBag className="h-4 w-4 text-primary" />
-                        <span className="text-sm font-medium">LDC</span>
+                    <Link href="/" className="flex items-center gap-2 group">
+                        <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center group-hover:shadow-lg group-hover:shadow-primary/25 transition-all duration-300">
+                            <ShoppingBag className="h-4 w-4 text-primary-foreground" />
+                        </div>
+                        <span className="text-sm font-semibold tracking-tight gradient-text">LDC</span>
                     </Link>
                     <HeaderNav isAdmin={isAdmin} />
                 </div>
