@@ -287,15 +287,15 @@ export function AdminOrdersContent({
                                     className="h-4 w-4"
                                 />
                             </TableHead>
-                            <TableHead>{t('admin.orders.orderId')}</TableHead>
-                            <TableHead>{t('admin.orders.user')}</TableHead>
-                            <TableHead>{t('admin.orders.product')}</TableHead>
-                            <TableHead>{t('admin.orders.amount')}</TableHead>
-                            <TableHead>{t('admin.orders.status')}</TableHead>
-                            <TableHead>{t('admin.orders.tradeNo')}</TableHead>
-                            <TableHead>{t('admin.orders.cardKey')}</TableHead>
-                            <TableHead>{t('admin.orders.date')}</TableHead>
-                            <TableHead className="text-right">{t('admin.orders.actions')}</TableHead>
+                            <TableHead className="w-[120px]">{t('admin.orders.orderId')}</TableHead>
+                            <TableHead className="min-w-[150px]">{t('admin.orders.user')}</TableHead>
+                            <TableHead className="min-w-[120px]">{t('admin.orders.product')}</TableHead>
+                            <TableHead className="w-[80px]">{t('admin.orders.amount')}</TableHead>
+                            <TableHead className="w-[100px]">{t('admin.orders.status')}</TableHead>
+                            <TableHead className="min-w-[120px]">{t('admin.orders.tradeNo')}</TableHead>
+                            <TableHead className="min-w-[150px]">{t('admin.orders.cardKey')}</TableHead>
+                            <TableHead className="min-w-[140px]">{t('admin.orders.date')}</TableHead>
+                            <TableHead className="text-right w-[100px]">{t('admin.orders.actions')}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
