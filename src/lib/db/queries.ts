@@ -65,7 +65,7 @@ export async function getProducts() {
             sortOrder: products.sortOrder,
             purchaseLimit: products.purchaseLimit,
                 singleCardOnly: products.singleCardOnly,
-            stock: sql<number>`count(case when COALESCE(${cards.isUsed}, false) = false then 1 end):: int`,
+            stock: sql<number>`count(case when COALESCE(${cards.isUsed}, false) = false AND (${cards.reservedAt} IS NULL OR ${cards.reservedAt} < NOW() - INTERVAL '1 minute') then 1 end):: int`,
             sold: sql<number>`count(case when COALESCE(${cards.isUsed}, false) = true then 1 end):: int`
         })
             .from(products)
@@ -89,7 +89,7 @@ export async function getActiveProducts() {
             isHot: products.isHot,
                 purchaseLimit: products.purchaseLimit,
                 singleCardOnly: products.singleCardOnly,
-            stock: sql<number>`count(case when COALESCE(${cards.isUsed}, false) = false then 1 end):: int`,
+            stock: sql<number>`count(case when COALESCE(${cards.isUsed}, false) = false AND (${cards.reservedAt} IS NULL OR ${cards.reservedAt} < NOW() - INTERVAL '1 minute') then 1 end):: int`,
             sold: sql<number>`count(case when COALESCE(${cards.isUsed}, false) = true then 1 end):: int`
         })
             .from(products)
@@ -113,7 +113,7 @@ export async function getProduct(id: string) {
             isHot: products.isHot,
             purchaseLimit: products.purchaseLimit,
                 singleCardOnly: products.singleCardOnly,
-            stock: sql<number>`count(case when COALESCE(${cards.isUsed}, false) = false then 1 end):: int`
+            stock: sql<number>`count(case when COALESCE(${cards.isUsed}, false) = false AND (${cards.reservedAt} IS NULL OR ${cards.reservedAt} < NOW() - INTERVAL '1 minute') then 1 end):: int`
         })
             .from(products)
             .leftJoin(cards, eq(products.id, cards.productId))
@@ -273,7 +273,7 @@ export async function searchActiveProducts(params: {
             isHot: products.isHot,
             purchaseLimit: products.purchaseLimit,
                 singleCardOnly: products.singleCardOnly,
-            stock: sql<number>`count(case when COALESCE(${cards.isUsed}, false) = false then 1 end):: int`,
+            stock: sql<number>`count(case when COALESCE(${cards.isUsed}, false) = false AND (${cards.reservedAt} IS NULL OR ${cards.reservedAt} < NOW() - INTERVAL '1 minute') then 1 end):: int`,
             sold: sql<number>`count(case when COALESCE(${cards.isUsed}, false) = true then 1 end):: int`
         })
             .from(products)
