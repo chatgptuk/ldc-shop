@@ -67,8 +67,9 @@ This architecture aims to combine the development efficiency of Next.js with the
     - 🌐 **English/Chinese switcher**.
     - 🌓 **Light/Dark/System themes**.
     - ⏱️ **Auto Update**: GitHub Actions workflow for upstream sync.
-- **Email Notifications**:
+- **Notifications**:
     - 📧 **Delivery Email**: Send order delivery notifications via Resend.
+    - 📢 **Telegram Notifications**: New order push notifications via Telegram Bot.
 
 ## 🚀 One-Click Deploy
 
