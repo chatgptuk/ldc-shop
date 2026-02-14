@@ -7,7 +7,7 @@
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
-    "deploy": "opennextjs-cloudflare build && wrangler deploy"
+    "deploy": "opennextjs-cloudflare build && node scripts/patch-worker-cache.mjs && wrangler deploy"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.15.1",

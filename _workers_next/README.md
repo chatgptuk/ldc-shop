@@ -97,8 +97,13 @@
 2. 选择 **Connect to Git**，连接你的 GitHub/GitLab 仓库
 3. 配置构建设置：
    - **Path**: `_workers_next`
-   - **Build command**: `npm install && npx opennextjs-cloudflare build`
+   - **Build command**: `npm install && npx opennextjs-cloudflare build && node scripts/patch-worker-cache.mjs`
    - **Deploy command**: `npx wrangler deploy`
+
+   > 为什么要加 `patch-worker-cache.mjs`？
+   > 
+   > 部分 Workers 部署会导致 `/_next/static/*` 返回 `Cache-Control: max-age=0`，浏览器无法缓存 Next.js 的静态资源（CSS/JS），从而出现“每次打开都很慢”。
+   > 该脚本会在构建后对 `.open-next/worker.js` 做一次小补丁，强制给 `/_next/static/*` 加上长缓存头：`public, max-age=31536000, immutable`。
 
 4. 点击 **Deploy**
 
