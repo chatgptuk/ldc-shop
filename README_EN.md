@@ -79,11 +79,19 @@ A robust, serverless virtual goods shop built with **Next.js 16**, **Shadcn UI**
 ## 🚀 Deployment Guide
 
 
-### ⭐ Recommended: Cloudflare Workers
+### ⭐ Recommended: Cloudflare Workers (One-Click Deploy)
 
 Higher free tier, faster global access, no cold start delay.
 
-👉 **[View Full Deployment Guide → `_workers_next/README.md`](./_workers_next/README.md)**
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/chatgptuk/ldc-shop)
+
+Click the button above to fork and deploy to Cloudflare Workers in one click. After deployment, you still need to:
+
+1. **Create D1 Database** (if not auto-created): Cloudflare Dashboard → Storage & Databases → D1 → Create database, name it `ldc-shop-next`
+2. **Configure Environment Variables**: Go to project Settings → Variables and Secrets, add `OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET`, `MERCHANT_ID`, `MERCHANT_KEY`, `AUTH_SECRET`, `ADMIN_USERS`, `NEXT_PUBLIC_APP_URL` (Text type)
+3. **Redeploy**: After configuration, manually trigger the **Deploy to Cloudflare Workers** workflow in GitHub Actions
+
+> For detailed configuration, see: **[Workers Deployment Guide → `_workers_next/README.md`](./_workers_next/README.md)**
 
 ### Alternative: Vercel
 

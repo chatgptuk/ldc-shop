@@ -25,18 +25,21 @@ jobs:
             const path = require('path');
             
             try {
-              // Backup user's wrangler.json (if exists and contains database_id)
-              const wranglerPath = '_workers_next/wrangler.json';
-              let userWrangler = null;
-              
-              if (fs.existsSync(wranglerPath)) {
-                const content = fs.readFileSync(wranglerPath, 'utf8');
-                // Only backup if user has customized it (contains d1_databases)
-                if (content.includes('d1_databases')) {
-                  userWrangler = content;
-                  console.log('📦 Backed up user wrangler.json with D1 config');
+              // Backup user's wrangler.json files (if exists and contains database_id)
+              const wranglerPaths = ['_workers_next/wrangler.json', 'wrangler.json'];
+              const backups = {};
+
+              for (const wranglerPath of wranglerPaths) {
+                if (fs.existsSync(wranglerPath)) {
+                  const content = fs.readFileSync(wranglerPath, 'utf8');
+                  if (content.includes('d1_databases')) {
+                    backups[wranglerPath] = content;
+                    console.log(`📦 Backed up ${wranglerPath} with D1 config`);
+                  }
                 }
               }
+
+              let userWrangler = backups['_workers_next/wrangler.json'] || null;
               
               // Configure Git
               await exec.exec('git', ['config', '--global', 'user.name', 'GitHub Actions']);
@@ -50,10 +53,21 @@ jobs:
               await exec.exec('git', ['checkout', 'main']);
               await exec.exec('git', ['reset', '--hard', 'upstream/main']);
               
-              // Restore user's wrangler.json if it was backed up
+              // Restore user's wrangler.json files if backed up
+              const filesToRestore = [];
               if (userWrangler) {
-                fs.writeFileSync(wranglerPath, userWrangler);
-                await exec.exec('git', ['add', wranglerPath]);
+                fs.writeFileSync('_workers_next/wrangler.json', userWrangler);
+                filesToRestore.push('_workers_next/wrangler.json');
+              }
+              if (backups['wrangler.json']) {
+                fs.writeFileSync('wrangler.json', backups['wrangler.json']);
+                filesToRestore.push('wrangler.json');
+              }
+
+              if (filesToRestore.length > 0) {
+                for (const f of filesToRestore) {
+                  await exec.exec('git', ['add', f]);
+                }
                 
                 // Check if there are actual changes to commit
                 let hasChanges = false;

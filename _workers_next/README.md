@@ -79,6 +79,14 @@
 
 ## 🚀 部署指南
 
+### 一键部署
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/chatgptuk/ldc-shop)
+
+点击上方按钮，自动 Fork 仓库并部署到 Cloudflare Workers。部署完成后，继续下方步骤配置数据库和环境变量。
+
+---
+
 ### 网页部署 (Workers Builds)
 
 无需命令行，完全在 Cloudflare Dashboard 操作。

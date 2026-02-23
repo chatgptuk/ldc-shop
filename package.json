@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "drizzle-kit push && next build",
+    "build": "cd _workers_next && npm install && npx opennextjs-cloudflare build",
+    "build:vercel": "drizzle-kit push && next build",
     "start": "next start",
     "lint": "eslint"
   },

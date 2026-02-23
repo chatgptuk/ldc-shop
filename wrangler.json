@@ -1,0 +1,27 @@
+{
+    "name": "ldc-shop-next",
+    "main": "_workers_next/worker-entry.mjs",
+    "keep_names": true,
+    "compatibility_date": "2025-11-12",
+    "compatibility_flags": [
+        "nodejs_compat"
+    ],
+    "assets": {
+        "directory": "_workers_next/.open-next/assets",
+        "binding": "ASSETS"
+    },
+    "d1_databases": [
+        {
+            "binding": "DB",
+            "database_name": "ldc-shop-next"
+        }
+    ],
+    "triggers": {
+        "crons": [
+            "* * * * *"
+        ]
+    },
+    "observability": {
+        "enabled": true
+    }
+}

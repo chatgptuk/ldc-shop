@@ -85,11 +85,19 @@
 
 > Workers 版独有功能与最新说明请直接查看：`_workers_next/README.md`。
 
-### ⭐ 推荐：Cloudflare Workers 部署
+### ⭐ 推荐：Cloudflare Workers 一键部署
 
 免费额度更高、全球访问更快、无冷启动延迟。
 
-👉 **[查看完整部署指南 → `_workers_next/README.md`](./_workers_next/README.md)**
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/chatgptuk/ldc-shop)
+
+点击上方按钮，即可一键 Fork 并部署到 Cloudflare Workers。部署完成后，还需要：
+
+1. **创建 D1 数据库**（如果部署流程未自动创建）：Cloudflare Dashboard → Storage & Databases → D1 → Create database，名称填 `ldc-shop-next`
+2. **配置环境变量**：进入项目 Settings → Variables and Secrets，添加 `OAUTH_CLIENT_ID`、`OAUTH_CLIENT_SECRET`、`MERCHANT_ID`、`MERCHANT_KEY`、`AUTH_SECRET`、`ADMIN_USERS`、`NEXT_PUBLIC_APP_URL`（Text 类型）
+3. **重新部署**：配置完成后，手动触发一次 GitHub Actions 的 **Deploy to Cloudflare Workers** workflow 即可
+
+> 详细配置说明请参考：**[Workers 部署指南 → `_workers_next/README.md`](./_workers_next/README.md)**
 
 ### 备选：Vercel 部署
 
