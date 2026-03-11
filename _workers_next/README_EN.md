@@ -32,6 +32,7 @@ This architecture aims to combine the development efficiency of Next.js with the
     - 📢 **Announcement Banner**: Configurable homepage announcements.
     - 📝 **Markdown Descriptions**: Rich product descriptions.
     - ⚠️ **Purchase Warning**: Optional pre-purchase warning modal.
+    - ❓ **Pre-Purchase Questions**: Admins can set multiple Q&A questions per product; buyers must answer all correctly before ordering (dual client + server validation).
     - 🔒 **Product Visibility**: Products can be restricted by user trust level (0–3); users below the level see a “login or upgrade” message.
     - 🔥 **Hot & Discounts**: Hot tag and original/discount price display.
     - ⭐ **Ratings & Reviews**: Verified buyers can rate and review.
@@ -40,7 +41,7 @@ This architecture aims to combine the development efficiency of Next.js with the
     - 🚫 **Purchase Limits**: Limit purchases by paid order count.
     - 🔢 **Quantity Selection**: Support purchasing multiple items.
     - 🏷️ **Custom Store Name**: Configurable store name in header/title.
-    - 📐 **Product Variants**: Multiple variants per product (e.g. monthly/yearly) with separate price and stock; homepage shows price range and variant count; detail page variant selector; admin and user order records show variant label; card keys are managed per variant (per product).
+    - 📐 **Product Variants**: Multiple variants per product (e.g. monthly/yearly) with separate price and stock; homepage shows price range and variant count with **aggregated stock/sold/review stats across all variants**; detail page variant selector with per-variant sold count; admin and user order records show variant label; card keys are managed per variant (per product).
 - **Orders & Delivery**:
     - ✅ **Payment Callback Verification**: Signature and amount checks.
     - 🎁 **Auto Delivery**: Card key delivery on payment; paid status retained if out of stock.
@@ -56,7 +57,7 @@ This architecture aims to combine the development efficiency of Next.js with the
 - **Admin Console**:
     - 📊 **Sales Stats**: Today/week/month/total overview.
     - ⚠️ **Low Stock Alerts**: Configurable threshold and warnings.
-    - 🧩 **Product Management**: Create/edit, enable/disable, reorder, purchase limits; **visibility** (everyone or trust level 0–3); **Variant Group ID** and **Variant Label** for multi-variant products; product and order lists show variant info.
+    - 🧩 **Product Management**: Create/edit, enable/disable, reorder, purchase limits; **visibility** (everyone or trust level 0–3); **Variant Group ID** and **Variant Label** for multi-variant products; **pre-purchase questions** (multiple Q&A); product and order lists show variant info.
     - 🏷️ **Category Management**: CRUD categories with icons and ordering.
     - 🗂️ **Card Inventory**: Bulk import and bulk delete unused card keys; each variant is a separate product—manage card keys per product.
     - 💳 **Order Management**: Pagination/search/filters, order detail, mark paid/delivered/cancel.
@@ -93,115 +94,161 @@ To offer the same product in multiple variants (e.g. monthly / yearly) with diff
 
 1. **Admin**: Create **one product per variant** in Product Management (different product IDs), each with its own price, stock, and card keys.
 2. **Link them**: When editing each product, set the same **Variant Group ID** (e.g. `chatgpt`) and a **Variant Label** for that row (e.g. `Monthly`, `Yearly`).
-3. **Storefront**: The homepage will show one combined card with price range and variant count; the detail page shows a variant selector; order records (admin and user) display the variant label.
+3. **Storefront**: The homepage will show one combined card with price range, variant count, and **aggregated stock/sold/reviews across all variants**; the detail page shows a variant selector with per-variant sold count; order records (admin and user) display the variant label.
 4. **Card keys**: Each variant is a separate product; manage card keys per product in Card Inventory.
 
-## 🚀 One-Click Deploy
+## 🚀 Deployment Guide
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchatgptuk%2Fldc-shop&env=OAUTH_CLIENT_ID,OAUTH_CLIENT_SECRET,MERCHANT_ID,MERCHANT_KEY,ADMIN_USERS,NEXT_PUBLIC_APP_URL&envDescription=Required%20Environment%20Variables&project-name=ldc-shop&repository-name=ldc-shop&stores=%5B%7B%22type%22%3A%22postgres%22%7D%5D)
+### Web Deploy (Workers Builds)
 
-Click the button above to deploy your own instance to Vercel.
+No command line needed—everything in the Cloudflare Dashboard.
 
-The database (Vercel Postgres) will be automatically provisioned and linked.
+#### 1. Create a D1 Database
 
-## ☁️ Cloudflare Workers Command Deploy
+1. Log in to [Cloudflare Dashboard](https://dash.cloudflare.com)
+2. **Storage & Databases** → **D1**
+3. Click **Create database**, name it: **`ldc-shop-next`**
 
-See [`_workers_v2/README.md`](./_workers_v2/README.md) for Wrangler-based deployment and configuration steps.
+> 💡 **Recommended**: Use the default name `ldc-shop-next`—the project's `wrangler.json` is pre-configured to auto-bind this database name, so you can skip manual binding.
 
-## 💡 Recommendation: Custom Domain
+#### 2. Connect Git Repository
 
-While the system supports active order status querying, for the best user experience (instant payment status updates), we still **recommend** binding a custom domain (e.g., `store.yourdomain.com`).
+1. Cloudflare Dashboard → **Workers & Pages** → **Create application**
+2. Choose **Connect to Git**, link your GitHub/GitLab repo
+3. Configure build settings:
+   - **Path**: `_workers_next`
+   - **Build command**: `npm install && npx opennextjs-cloudflare build`
+   - **Deploy command**: `npx wrangler deploy`
 
-The shared `vercel.app` domain is sometimes flagged by firewalls or payment gateways, which might delay or block payment callbacks. Using a custom domain avoids these issues.
+4. Click **Deploy**
 
-## 🐳 Docker Deployment (Docker Compose)
+#### Auto-deploy not triggered? Quick troubleshooting
 
-> ⚠️ **Experimental**: Docker deployment has not been fully tested and may have unknown issues. **We recommend using Vercel deployment** for better stability.
+If code is pushed but Cloudflare doesn't start a new build:
 
-If you have your own server (VPS/NAS), you can deploy simply with Docker:
+1. Confirm the project type is **Workers Builds** (not Pages).
+2. Confirm the monitored Git branch matches your push branch (e.g. both `main`).
+3. Confirm changes are inside **Path = `_workers_next`** (changes outside may not trigger this project).
+4. Confirm build/deploy commands are:
+   - Build: `npm install && npx opennextjs-cloudflare build`
+   - Deploy: `npx wrangler deploy`
+5. If everything looks correct, try disconnecting and reconnecting Git authorization in the Dashboard.
 
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/chatgptuk/ldc-shop.git
-    cd ldc-shop
-    ```
-2.  Edit `docker-compose.yml` environment variables:
-    - This file starts a local PostgreSQL database by default.
-    - **Crucial**: Replace `OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET`, `MERCHANT_ID`, `MERCHANT_KEY` with your actual credentials.
-3.  Start the service:
-    ```bash
-    docker-compose up -d
-    ```
-4.  Visit `http://localhost:3000`.
-    - Database data is persisted in the local `./postgres-data` folder.
+#### 3. Bind D1 Database
 
-## 🔄 How to Enable Auto Update
+**If you used the default database name `ldc-shop-next`**, auto-binding applies—skip this step.
 
-If you forked this project, you can enable GitHub Actions to automatically sync the latest code from upstream (triggering a Vercel redeploy):
+**If you used a different name**, bind manually:
 
-1.  Go to your GitHub repository page.
-2.  Click the **Actions** tab.
-3.  Select **Upstream Sync** from the left sidebar.
-4.  Click the **Enable workflow** button.
-5.  (Optional) Click **Run workflow** to test it manually.
+1. Go to project **Settings** → **Bindings**
+2. Click **Add binding**
+3. Select **D1 Database**
+4. **Variable name**: `DB` (must be exactly this)
+5. Select your database
+6. Save
 
-Once enabled, the script will check for updates from `chatgptuk/ldc-shop:main` daily and merge them into your repository.
+#### 4. Configure Environment Variables
 
+Go to project **Settings** → **Variables and Secrets**:
 
-## ⚙️ Configuration Guide
+| Variable | Type | Description |
+|----------|------|-------------|
+| `OAUTH_CLIENT_ID` | Secret | Linux DO Connect Client ID |
+| `OAUTH_CLIENT_SECRET` | Secret | Linux DO Connect Client Secret |
+| `GITHUB_ID` | Secret | GitHub OAuth App Client ID (optional, enables GitHub login) |
+| `GITHUB_SECRET` | Secret | GitHub OAuth App Client Secret (optional, enables GitHub login) |
+| `MERCHANT_ID` | Secret | EPay Merchant ID |
+| `MERCHANT_KEY` | Secret | EPay Merchant Key |
+| `AUTH_SECRET` | Secret | Random string (`openssl rand -base64 32`) |
+| `ADMIN_USERS` | Secret | Admin username list (Linux DO usernames and GitHub `gh_username`), comma-separated. E.g. `zhangsan,gh_octocat` |
+| `NEXT_PUBLIC_APP_URL` | **Text** | Your Workers URL (e.g. `https://ldc-shop.xxx.workers.dev`) |
 
-The following environment variables are required.
+> ⚠️ **Important**: `NEXT_PUBLIC_APP_URL` **must** be set as Text, not Secret—otherwise payment signatures will fail!
+> ⚠️ **Important**: For GitHub users to be admin, `ADMIN_USERS` **must** contain `gh_GitHubUsername` (e.g. `gh_octocat`), not just the raw GitHub username.
 
-> **⚠️ NOTE**: 
-> The following configuration uses `store.chatgpt.org.uk` as an example. **Please replace it with your ACTUAL domain when deploying!**
+**Callback URLs:**
 
-### 1. Linux DO Connect (OIDC)
-Go to [connect.linux.do](https://connect.linux.do) to create/configure:
+Assuming your Workers URL is `https://ldc-shop.xxx.workers.dev`:
 
-*   **App Name**: `LDC Store Next` (or any name)
-*   **App Homepage**: `https://store.chatgpt.org.uk`
-*   **App Description**: `LDC Store Next`
-*   **Callback URL**: `https://store.chatgpt.org.uk/api/auth/callback/linuxdo`
+| Platform | Config | URL |
+|----------|--------|-----|
+| Linux DO Connect | Callback URL | `https://ldc-shop.xxx.workers.dev/api/auth/callback/linuxdo` |
+| GitHub OAuth App | Authorization callback URL | `https://ldc-shop.xxx.workers.dev/api/auth/callback/github` |
+| EPay / Linux DO Credit | Notify URL | `https://ldc-shop.xxx.workers.dev/api/notify` |
+| EPay / Linux DO Credit | Return URL | `https://ldc-shop.xxx.workers.dev/callback` |
 
-Get **Client ID** and **Client Secret**, and fill them into environment variables as `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` (**Secret recommended**).
+> The GitHub **Authorization callback URL** must be: `<your-full-site-url>/api/auth/callback/github`
+> Example: `https://shop.chatgpt.org.uk/api/auth/callback/github`
+> Must exactly match `NEXT_PUBLIC_APP_URL` protocol and domain, no trailing slash.
 
-### 2. EPay (Linux DO Credit)
-Go to [credit.linux.do](https://credit.linux.do) to create/configure:
-
-*   **App Name**: `LDC Store Next` (or any name)
-*   **App Address**: `https://store.chatgpt.org.uk`
-*   **Callback URI**: `https://store.chatgpt.org.uk/callback`
-*   **Notify URL**: `https://store.chatgpt.org.uk/api/notify`
-
-Get **Client ID** and **Client Secret**, and fill them into environment variables as `MERCHANT_ID` and `MERCHANT_KEY` (**Secret recommended**).
-
-For GitHub OAuth App, set **Authorization callback URL** to:
-`<your-full-site-url>/api/auth/callback/github`
-
-Example:
-`https://shop.chatgpt.org.uk/api/auth/callback/github`
-
-It must exactly match the protocol and domain of `NEXT_PUBLIC_APP_URL` (no extra trailing slash).
-
-GitHub OAuth App creation steps:
+**GitHub OAuth App setup:**
 
 1. Open [GitHub Developer Settings](https://github.com/settings/developers).
-2. Go to **OAuth Apps** and click **New OAuth App**.
+2. Go to **OAuth Apps** → **New OAuth App**.
 3. Fill in:
-   - **Application name**: any name (for example `LDC Shop`)
-   - **Homepage URL**: your full site URL (must match `NEXT_PUBLIC_APP_URL`)
+   - **Application name**: any name (e.g. `LDC Shop`)
+   - **Homepage URL**: your full site URL (matches `NEXT_PUBLIC_APP_URL`)
    - **Authorization callback URL**: `<your-full-site-url>/api/auth/callback/github`
 4. Click **Register application**.
-5. Copy **Client ID**, then click **Generate a new client secret** to get **Client Secret**.
+5. Copy **Client ID**, click **Generate a new client secret** for **Client Secret**.
 6. Set Worker environment variables:
    - `GITHUB_ID` = Client ID
    - `GITHUB_SECRET` = Client Secret (recommended as Secret)
 
-### 3. Other Variables
-*   **ADMIN_USERS**: Admin usernames, comma separated (supports Linux DO usernames and GitHub usernames in `gh_GitHub用户名` format, e.g., `chatgpt,gh_octocat`) (**Secret recommended**).
-*   **NEXT_PUBLIC_APP_URL**: Your full app URL (e.g., `https://store.chatgpt.org.uk`). **Must be Text, not Secret**.
+#### 5. First Visit
 
-> Important: For a GitHub account to be recognized as admin, `ADMIN_USERS` must contain `gh_GitHub用户名` (for example `gh_octocat`). Using just `octocat` will not work.
+Visit your Workers URL; the homepage will automatically create all database tables.
+
+---
+
+#### 6. Access the Admin Console
+
+1. **Set admin**: Configure admin usernames in the `ADMIN_USERS` environment variable (case-insensitive, comma-separated). Supports Linux DO usernames and GitHub `gh_GitHubUsername`.
+2. **Log in**: Sign in to the store with the admin account.
+3. **Entry points**:
+    - **Top nav**: After login, a "Admin" link appears in the nav bar (desktop).
+    - **Dropdown menu**: Click avatar → "Admin" option.
+    - **Direct URL**: Visit `/admin` (e.g. `https://your-domain.workers.dev/admin`).
+
+---
+
+## 💻 Local Development
+
+Local development uses a SQLite file to simulate D1.
+
+1. **Configure local environment**
+   Copy `.env.example` (if available) or create `.env.local`:
+   ```bash
+   LOCAL_DB_PATH=local.sqlite
+   ```
+
+2. **Generate local database**
+   ```bash
+   npx drizzle-kit push
+   ```
+   This creates a `local.sqlite` file.
+
+3. **Start dev server**
+   ```bash
+   npm run dev
+   ```
+   Visit `http://localhost:3000`.
+
+## ⚙️ Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `OAUTH_CLIENT_ID` | Linux DO Connect Client ID (Secret recommended) |
+| `OAUTH_CLIENT_SECRET` | Linux DO Connect Client Secret (Secret) |
+| `GITHUB_ID` | GitHub OAuth App Client ID (optional, enables GitHub login) |
+| `GITHUB_SECRET` | GitHub OAuth App Client Secret (optional, enables GitHub login) |
+| `MERCHANT_ID` | EPay Merchant ID (Secret recommended) |
+| `MERCHANT_KEY` | EPay Merchant Key (Secret) |
+| `AUTH_SECRET` | NextAuth encryption key (Secret) |
+| `ADMIN_USERS` | Admin username list, supports Linux DO usernames and GitHub `gh_GitHubUsername`, comma-separated. E.g. `zhangsan,gh_octocat` |
+| `NEXT_PUBLIC_APP_URL` | Full deployed URL (for callbacks, must be Text) |
+
+> ⚠️ When using GitHub login, system usernames are auto-prefixed with `gh_`; for admin access, `ADMIN_USERS` **must** contain the prefixed username (e.g. `gh_octocat`), not just `octocat`.
 
 ## 🔌 Card Auto-Replenish API Integration
 
@@ -273,27 +320,6 @@ ABC-DEF-123
 - Failure (out of stock/auth invalid/invalid params): return `4xx/5xx`
 
 Your API should avoid returning duplicate card keys. Duplicate keys will be rejected by the store's uniqueness constraints.
-
-## 🛠️ Local Development
-
-1.  Clone the repository.
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
-3.  Link Vercel Project (for Env Vars & DB):
-    ```bash
-    vercel link
-    vercel env pull .env.development.local
-    ```
-4.  Run migrations:
-    ```bash
-    npx drizzle-kit push
-    ```
-5.  Start dev server:
-    ```bash
-    npm run dev
-    ```
 
 ## 📄 License
 MIT
