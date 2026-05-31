@@ -8,6 +8,7 @@ export const products = pgTable('products', {
     description: text('description'),
     price: decimal('price', { precision: 10, scale: 2 }).notNull(),
     compareAtPrice: decimal('compare_at_price', { precision: 10, scale: 2 }),
+    maxPointsDiscount: decimal('max_points_discount', { precision: 10, scale: 2 }),
     category: text('category'),
     image: text('image'),
     isHot: boolean('is_hot').default(false),

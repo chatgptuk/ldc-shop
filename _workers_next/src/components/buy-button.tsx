@@ -22,9 +22,29 @@ interface BuyButtonProps {
     emailConfigured?: boolean
     answers?: string[]
     className?: string
+    maxPointsDiscount?: string | number | null
 }
 
-export function BuyButton({ productId, price, productName, disabled, quantity = 1, autoOpen = false, emailConfigured = false, answers, className }: BuyButtonProps) {
+function getMaxPointDeduction(totalAmount: number, quantity: number, maxPointsDiscount: string | number | null | undefined) {
+    const rawLimit = typeof maxPointsDiscount === 'string' ? maxPointsDiscount.trim() : maxPointsDiscount
+    if (rawLimit === null || rawLimit === undefined || rawLimit === '') {
+        return Math.ceil(totalAmount)
+    }
+
+    const unitLimit = Number(rawLimit)
+    if (!Number.isFinite(unitLimit) || unitLimit < 0) {
+        return Math.ceil(totalAmount)
+    }
+
+    const cappedAmount = Math.min(totalAmount, unitLimit * quantity)
+    if (cappedAmount >= totalAmount) {
+        return Math.ceil(totalAmount)
+    }
+
+    return Math.floor(Math.max(0, cappedAmount))
+}
+
+export function BuyButton({ productId, price, productName, disabled, quantity = 1, autoOpen = false, emailConfigured = false, answers, className, maxPointsDiscount }: BuyButtonProps) {
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [points, setPoints] = useState(0)
@@ -126,7 +146,8 @@ export function BuyButton({ productId, price, productName, disabled, quantity = 
     }
 
     // Calculation for UI
-    const pointsToUse = usePoints ? Math.min(points, Math.ceil(numericalPrice)) : 0
+    const maxPointDeduction = getMaxPointDeduction(numericalPrice, quantity, maxPointsDiscount)
+    const pointsToUse = usePoints ? Math.min(points, maxPointDeduction) : 0
     const finalPrice = Math.max(0, numericalPrice - pointsToUse)
 
     return (
@@ -169,7 +190,7 @@ export function BuyButton({ productId, price, productName, disabled, quantity = 
                         </Label>
                     </div>
 
-                        {points > 0 && (
+                        {points > 0 && maxPointDeduction > 0 && (
                             <div className="flex items-center space-x-2 border p-3 rounded-md">
                                 <input
                                     type="checkbox"

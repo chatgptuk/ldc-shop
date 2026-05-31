@@ -23,7 +23,7 @@ export function NavigationPill({ items, selectedKey, onSelect }: NavigationPillP
 
         if (activeElement) {
             setIndicatorStyle({
-                left: activeElement.offsetLeft,
+                left: container.offsetLeft + activeElement.offsetLeft,
                 width: activeElement.offsetWidth,
             })
         } else {
@@ -31,7 +31,7 @@ export function NavigationPill({ items, selectedKey, onSelect }: NavigationPillP
             const firstElement = container.children[0] as HTMLElement | undefined
             if (firstElement) {
                 setIndicatorStyle({
-                    left: firstElement.offsetLeft,
+                    left: container.offsetLeft + firstElement.offsetLeft,
                     width: firstElement.offsetWidth,
                 })
             }
@@ -42,7 +42,7 @@ export function NavigationPill({ items, selectedKey, onSelect }: NavigationPillP
         <div className="relative inline-flex items-center rounded-full bg-muted/60 p-1 backdrop-blur-sm">
             {/* Animated background indicator */}
             <motion.div
-                className="absolute h-[calc(100%-8px)] rounded-full bg-background shadow-sm"
+                className="absolute top-1 h-[calc(100%-8px)] rounded-full bg-background shadow-sm"
                 initial={false}
                 animate={{
                     left: indicatorStyle.left,
@@ -62,7 +62,7 @@ export function NavigationPill({ items, selectedKey, onSelect }: NavigationPillP
                         key={item.key}
                         type="button"
                         className={cn(
-                            'relative px-4 py-1.5 text-sm font-medium transition-colors duration-200 rounded-full whitespace-nowrap',
+                            'relative inline-flex h-8 items-center justify-center rounded-full px-4 text-sm font-medium leading-none whitespace-nowrap transition-colors duration-200',
                             selectedKey === item.key
                                 ? 'text-foreground'
                                 : 'text-muted-foreground hover:text-foreground/80'

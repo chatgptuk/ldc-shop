@@ -383,6 +383,9 @@
             "saveButton": "Save Product",
             "purchaseLimitLabel": "Purchase Limit (Cumulative)",
             "purchaseLimitPlaceholder": "0 or empty for unlimited",
+            "maxPointsDiscountLabel": "Max Points Discount Per Item",
+            "maxPointsDiscountPlaceholder": "Empty for unlimited",
+            "maxPointsDiscountHint": "Applied per item and deducted as whole points. Enter 0 to disable point discounts for this product.",
             "saving": "Saving..."
         }
     },

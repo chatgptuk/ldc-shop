@@ -17,6 +17,30 @@ import { pullOneCardFromApi } from "@/lib/card-api"
 const MAX_ORDER_QUANTITY = 10000
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+function isMissingColumnError(error: any) {
+    const errorString = (JSON.stringify(error) + String(error) + (error?.message || '')).toLowerCase()
+    return errorString.includes('no such column') || errorString.includes('column not found') || errorString.includes('d1_column_notfound')
+}
+
+function getMaxPointDeduction(totalAmount: number, quantity: number, maxPointsDiscount: string | number | null | undefined) {
+    const rawLimit = typeof maxPointsDiscount === 'string' ? maxPointsDiscount.trim() : maxPointsDiscount
+    if (rawLimit === null || rawLimit === undefined || rawLimit === '') {
+        return Math.ceil(totalAmount)
+    }
+
+    const unitLimit = Number(rawLimit)
+    if (!Number.isFinite(unitLimit) || unitLimit < 0) {
+        return Math.ceil(totalAmount)
+    }
+
+    const cappedAmount = Math.min(totalAmount, unitLimit * quantity)
+    if (cappedAmount >= totalAmount) {
+        return Math.ceil(totalAmount)
+    }
+
+    return Math.floor(Math.max(0, cappedAmount))
+}
+
 function isValidEmail(value: string | null | undefined) {
     if (!value) return false
     return EMAIL_REGEX.test(value.trim())
@@ -51,17 +75,31 @@ export async function createOrder(productId: string, quantity: number = 1, email
     quantity = normalizedQuantity
 
     // 1. Get Product
-    const product = await db.query.products.findFirst({
-        where: eq(products.id, productId),
-        columns: {
-            id: true,
-            name: true,
-            price: true,
-            purchaseLimit: true,
-            isShared: true,
-            purchaseQuestions: true
+    const getCheckoutProduct = async () => {
+        const query = () => db.query.products.findFirst({
+            where: eq(products.id, productId),
+            columns: {
+                id: true,
+                name: true,
+                price: true,
+                purchaseLimit: true,
+                maxPointsDiscount: true,
+                isShared: true,
+                purchaseQuestions: true
+            }
+        })
+
+        try {
+            return await query()
+        } catch (error: any) {
+            if (!isMissingColumnError(error)) throw error
+            try {
+                await db.run(sql.raw(`ALTER TABLE products ADD COLUMN max_points_discount TEXT`))
+            } catch { /* column exists */ }
+            return await query()
         }
-    })
+    }
+    const product = await getCheckoutProduct()
     if (!product) return { success: false, error: 'buy.productNotFound' }
 
     if (product.purchaseQuestions) {
@@ -113,7 +151,7 @@ export async function createOrder(productId: string, quantity: number = 1, email
 
         if (currentPoints > 0) {
             // Logic: 1 Point = 1 Unit of currency
-            pointsToUse = Math.min(currentPoints, Math.ceil(finalAmount))
+            pointsToUse = Math.min(currentPoints, getMaxPointDeduction(finalAmount, quantity, product.maxPointsDiscount))
             finalAmount = Math.max(0, finalAmount - pointsToUse)
         }
     }

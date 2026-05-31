@@ -10,7 +10,7 @@ let sqliteInstance: Database.Database;
 const BUILD_TIME_SCHEMA = `
     CREATE TABLE IF NOT EXISTS products (
         id TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT, price TEXT NOT NULL,
-        compare_at_price TEXT, category TEXT, image TEXT, is_hot INTEGER DEFAULT 0,
+        compare_at_price TEXT, max_points_discount TEXT, category TEXT, image TEXT, is_hot INTEGER DEFAULT 0,
         is_active INTEGER DEFAULT 1, is_shared INTEGER DEFAULT 0, sort_order INTEGER DEFAULT 0,
         purchase_limit INTEGER, purchase_warning TEXT, visibility_level INTEGER DEFAULT -1,
         stock_count INTEGER DEFAULT 0, locked_count INTEGER DEFAULT 0, sold_count INTEGER DEFAULT 0,

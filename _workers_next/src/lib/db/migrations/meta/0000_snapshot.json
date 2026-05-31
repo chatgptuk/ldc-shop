@@ -407,6 +407,13 @@
           "notNull": false,
           "autoincrement": false
         },
+        "max_points_discount": {
+          "name": "max_points_discount",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "category": {
           "name": "category",
           "type": "text",

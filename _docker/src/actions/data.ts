@@ -80,6 +80,7 @@ export async function importData(formData: FormData) {
         const columnMap: Record<string, string> = {
             // Products
             compareAtPrice: 'compare_at_price',
+            maxPointsDiscount: 'max_points_discount',
             isHot: 'is_hot',
             isActive: 'is_active',
             isShared: 'is_shared',

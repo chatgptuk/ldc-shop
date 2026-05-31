@@ -383,6 +383,9 @@
             "saveButton": "保存商品",
             "purchaseLimitLabel": "限购数量（累计）",
             "purchaseLimitPlaceholder": "不填或 0 为无限购",
+            "maxPointsDiscountLabel": "每件最多积分抵扣金额",
+            "maxPointsDiscountPlaceholder": "不填为不限制",
+            "maxPointsDiscountHint": "按每件商品计算，并按整数积分抵扣；填 0 则该商品不可用积分抵扣。",
             "saving": "保存中..."
         }
     },

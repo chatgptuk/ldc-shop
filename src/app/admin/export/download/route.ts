@@ -148,6 +148,7 @@ export async function GET(req: Request) {
         name: p.name,
         description: p.description,
         price: p.price,
+        maxPointsDiscount: p.maxPointsDiscount,
         category: p.category,
         image: p.image,
         isActive: p.isActive ?? true,
@@ -171,6 +172,7 @@ export async function GET(req: Request) {
           "name",
           "description",
           "price",
+          "maxPointsDiscount",
           "category",
           "image",
           "isActive",
@@ -291,6 +293,7 @@ export async function GET(req: Request) {
           isActive: 'is_active',
           sortOrder: 'sort_order',
           purchaseLimit: 'purchase_limit',
+          maxPointsDiscount: 'max_points_discount',
           createdAt: 'created_at',
           // Cards
           productId: 'product_id',

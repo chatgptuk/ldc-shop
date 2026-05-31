@@ -123,6 +123,20 @@ export default function ProductForm({ product, categories = [] }: { product?: an
                     </div>
 
                     <div className="grid gap-2">
+                        <Label htmlFor="maxPointsDiscount">{t('admin.productForm.maxPointsDiscountLabel')}</Label>
+                        <Input
+                            id="maxPointsDiscount"
+                            name="maxPointsDiscount"
+                            type="number"
+                            min="0"
+                            step="1"
+                            defaultValue={currentProduct?.maxPointsDiscount || ''}
+                            placeholder={t('admin.productForm.maxPointsDiscountPlaceholder')}
+                        />
+                        <p className="text-xs text-muted-foreground">{t('admin.productForm.maxPointsDiscountHint')}</p>
+                    </div>
+
+                    <div className="grid gap-2">
                         <Label htmlFor="category">{t('admin.productForm.categoryLabel')}</Label>
                         <Input id="category" name="category" list="ldc-category-list" defaultValue={currentProduct?.category} placeholder={t('admin.productForm.categoryPlaceholder')} />
                         <datalist id="ldc-category-list">

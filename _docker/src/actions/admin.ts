@@ -44,6 +44,16 @@ export async function saveProduct(formData: FormData) {
     const description = formData.get('description') as string
     const price = formData.get('price') as string
     const compareAtPrice = (formData.get('compareAtPrice') as string | null) || null
+    const maxPointsDiscountRaw = String(formData.get('maxPointsDiscount') || '').trim()
+    const maxPointsDiscount = maxPointsDiscountRaw === ''
+        ? null
+        : (() => {
+            const value = Number(maxPointsDiscountRaw)
+            if (!Number.isFinite(value) || value < 0) {
+                throw new Error("Invalid max points discount")
+            }
+            return Math.floor(value).toFixed(2)
+        })()
     const category = formData.get('category') as string
     const image = formData.get('image') as string
     const purchaseLimit = formData.get('purchaseLimit') ? parseInt(formData.get('purchaseLimit') as string) : null
@@ -74,6 +84,7 @@ export async function saveProduct(formData: FormData) {
             description,
             price,
             compareAtPrice: compareAtPrice && compareAtPrice !== '0' ? compareAtPrice : null,
+            maxPointsDiscount,
             category,
             image,
             purchaseLimit,
@@ -88,6 +99,7 @@ export async function saveProduct(formData: FormData) {
                 description,
                 price,
                 compareAtPrice: compareAtPrice && compareAtPrice !== '0' ? compareAtPrice : null,
+                maxPointsDiscount,
                 category,
                 image,
                 purchaseLimit,
@@ -103,6 +115,9 @@ export async function saveProduct(formData: FormData) {
     const ensureColumns = async () => {
         try {
             await db.run(sql.raw(`ALTER TABLE products ADD COLUMN compare_at_price TEXT`));
+        } catch { /* column exists */ }
+        try {
+            await db.run(sql.raw(`ALTER TABLE products ADD COLUMN max_points_discount TEXT`));
         } catch { /* column exists */ }
         try {
             await db.run(sql.raw(`ALTER TABLE products ADD COLUMN is_hot INTEGER DEFAULT 0`));

@@ -29,6 +29,7 @@ interface Product {
     description: string | null
     price: string
     compareAtPrice?: string | null
+    maxPointsDiscount?: string | null
     image: string | null
     category: string | null
     purchaseLimit?: number | null
@@ -255,6 +256,7 @@ export function BuyContent({
                                                 price={product.price}
                                                 productName={product.name}
                                                 quantity={quantity}
+                                                maxPointsDiscount={product.maxPointsDiscount}
                                             />
                                         </div>
                                     ) : (

@@ -8,14 +8,56 @@ import { generateOrderId, generateSign } from "@/lib/crypto"
 import { eq, sql, and, or } from "drizzle-orm"
 import { cookies } from "next/headers"
 
+function isMissingColumnError(error: any) {
+    const errorString = JSON.stringify(error)
+    return errorString.includes('42703') || error?.message?.includes('does not exist')
+}
+
+function getMaxPointDeduction(totalAmount: number, quantity: number, maxPointsDiscount: string | number | null | undefined) {
+    const rawLimit = typeof maxPointsDiscount === 'string' ? maxPointsDiscount.trim() : maxPointsDiscount
+    if (rawLimit === null || rawLimit === undefined || rawLimit === '') {
+        return Math.ceil(totalAmount)
+    }
+
+    const unitLimit = Number(rawLimit)
+    if (!Number.isFinite(unitLimit) || unitLimit < 0) {
+        return Math.ceil(totalAmount)
+    }
+
+    const cappedAmount = Math.min(totalAmount, unitLimit * quantity)
+    if (cappedAmount >= totalAmount) {
+        return Math.ceil(totalAmount)
+    }
+
+    return Math.floor(Math.max(0, cappedAmount))
+}
+
 export async function createOrder(productId: string, quantity: number = 1, email?: string, usePoints: boolean = false) {
     const session = await auth()
     const user = session?.user
 
     // 1. Get Product
-    const product = await db.query.products.findFirst({
-        where: eq(products.id, productId)
-    })
+    const getCheckoutProduct = async () => {
+        const query = () => db.query.products.findFirst({
+            where: eq(products.id, productId),
+            columns: {
+                id: true,
+                name: true,
+                price: true,
+                purchaseLimit: true,
+                maxPointsDiscount: true
+            }
+        })
+
+        try {
+            return await query()
+        } catch (error: any) {
+            if (!isMissingColumnError(error)) throw error
+            await db.execute(sql`ALTER TABLE products ADD COLUMN IF NOT EXISTS max_points_discount DECIMAL(10, 2);`)
+            return await query()
+        }
+    }
+    const product = await getCheckoutProduct()
     if (!product) return { success: false, error: 'buy.productNotFound' }
 
     // 2. Check Blocked Status
@@ -48,7 +90,7 @@ export async function createOrder(productId: string, quantity: number = 1, email
 
         if (currentPoints > 0) {
             // Logic: 1 Point = 1 Unit of currency
-            pointsToUse = Math.min(currentPoints, Math.ceil(finalAmount))
+            pointsToUse = Math.min(currentPoints, getMaxPointDeduction(finalAmount, quantity, product.maxPointsDiscount))
             finalAmount = Math.max(0, finalAmount - pointsToUse)
         }
     }

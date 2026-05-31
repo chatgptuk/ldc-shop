@@ -34,6 +34,7 @@ interface Product {
     description: string | null
     price: string
     compareAtPrice?: string | null
+    maxPointsDiscount?: string | null
     image: string | null
     productImages?: string | null
     category: string | null
@@ -118,6 +119,7 @@ export function BuyContent({
                     description: v.description,
                     price: v.price,
                     compareAtPrice: v.compareAtPrice,
+                    maxPointsDiscount: v.maxPointsDiscount,
                     image: v.image,
                     productImages: v.productImages,
                     category: product.category,
@@ -721,6 +723,7 @@ export function BuyContent({
                                                         price={displayProduct.price}
                                                         productName={displayProduct.name}
                                                         quantity={quantity}
+                                                        maxPointsDiscount={displayProduct.maxPointsDiscount}
                                                         autoOpen={warningConfirmed && !!displayProduct.purchaseWarning}
                                                         emailConfigured={emailConfiguredState}
                                                         answers={hasQuestions ? questionAnswers : undefined}

@@ -61,6 +61,7 @@ CREATE TABLE `products` (
 	`description` text,
 	`price` text NOT NULL,
 	`compare_at_price` text,
+	`max_points_discount` text,
 	`category` text,
 	`image` text,
 	`is_hot` integer DEFAULT false,

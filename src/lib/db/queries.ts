@@ -5,6 +5,7 @@ import { eq, sql, desc, and, asc, gte, or } from "drizzle-orm";
 async function ensureProductsColumns() {
     await db.execute(sql`
         ALTER TABLE products ADD COLUMN IF NOT EXISTS compare_at_price DECIMAL(10, 2);
+        ALTER TABLE products ADD COLUMN IF NOT EXISTS max_points_discount DECIMAL(10, 2);
         ALTER TABLE products ADD COLUMN IF NOT EXISTS is_hot BOOLEAN DEFAULT FALSE;
     `)
 }
@@ -50,6 +51,7 @@ export async function getProducts() {
             description: products.description,
             price: products.price,
             compareAtPrice: products.compareAtPrice,
+            maxPointsDiscount: products.maxPointsDiscount,
             image: products.image,
             category: products.category,
             isHot: products.isHot,
@@ -76,6 +78,7 @@ export async function getActiveProducts() {
             description: products.description,
             price: products.price,
             compareAtPrice: products.compareAtPrice,
+            maxPointsDiscount: products.maxPointsDiscount,
             image: products.image,
             category: products.category,
             isHot: products.isHot,
@@ -100,6 +103,7 @@ export async function getProduct(id: string) {
             description: products.description,
             price: products.price,
             compareAtPrice: products.compareAtPrice,
+            maxPointsDiscount: products.maxPointsDiscount,
             image: products.image,
             category: products.category,
             isHot: products.isHot,
@@ -266,6 +270,7 @@ export async function searchActiveProducts(params: {
             description: products.description,
             price: products.price,
             compareAtPrice: products.compareAtPrice,
+            maxPointsDiscount: products.maxPointsDiscount,
             image: products.image,
             category: products.category,
             isHot: products.isHot,

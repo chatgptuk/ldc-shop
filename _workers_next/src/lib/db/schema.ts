@@ -7,6 +7,7 @@ export const products = sqliteTable('products', {
     description: text('description'),
     price: text('price').notNull(), // SQLite doesn't have decimal, use text for precision
     compareAtPrice: text('compare_at_price'),
+    maxPointsDiscount: text('max_points_discount'),
     category: text('category'),
     image: text('image'),
     productImages: text('product_images'),

@@ -26,6 +26,16 @@ export async function saveProduct(formData: FormData) {
     const description = formData.get('description') as string
     const price = formData.get('price') as string
     const compareAtPrice = (formData.get('compareAtPrice') as string | null) || null
+    const maxPointsDiscountRaw = String(formData.get('maxPointsDiscount') || '').trim()
+    const maxPointsDiscount = maxPointsDiscountRaw === ''
+        ? null
+        : (() => {
+            const value = Number(maxPointsDiscountRaw)
+            if (!Number.isFinite(value) || value < 0) {
+                throw new Error("Invalid max points discount")
+            }
+            return Math.floor(value).toFixed(2)
+        })()
     const category = formData.get('category') as string
     const image = formData.get('image') as string
     const purchaseLimit = formData.get('purchaseLimit') ? parseInt(formData.get('purchaseLimit') as string) : null
@@ -48,6 +58,7 @@ export async function saveProduct(formData: FormData) {
             description,
             price,
             compareAtPrice: compareAtPrice && compareAtPrice !== '0' ? compareAtPrice : null,
+            maxPointsDiscount,
             category,
             image,
             purchaseLimit,
@@ -59,6 +70,7 @@ export async function saveProduct(formData: FormData) {
                 description,
                 price,
                 compareAtPrice: compareAtPrice && compareAtPrice !== '0' ? compareAtPrice : null,
+                maxPointsDiscount,
                 category,
                 image,
                 purchaseLimit,
@@ -74,6 +86,7 @@ export async function saveProduct(formData: FormData) {
         if (errorString.includes('42703')) {
             await db.execute(sql`
                 ALTER TABLE products ADD COLUMN IF NOT EXISTS compare_at_price DECIMAL(10, 2);
+                ALTER TABLE products ADD COLUMN IF NOT EXISTS max_points_discount DECIMAL(10, 2);
                 ALTER TABLE products ADD COLUMN IF NOT EXISTS is_hot BOOLEAN DEFAULT FALSE;
             `)
             await doSave()

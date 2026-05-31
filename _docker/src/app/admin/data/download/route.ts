@@ -156,6 +156,7 @@ export async function GET(req: Request) {
         name: p.name,
         description: p.description,
         price: p.price,
+        maxPointsDiscount: p.maxPointsDiscount,
         category: p.category,
         image: p.image,
         isActive: p.isActive ?? true,
@@ -180,6 +181,7 @@ export async function GET(req: Request) {
           "name",
           "description",
           "price",
+          "maxPointsDiscount",
           "category",
           "image",
           "isActive",
@@ -302,6 +304,7 @@ export async function GET(req: Request) {
         const columnMapping: Record<string, string> = {
           // Products
           compareAtPrice: 'compare_at_price',
+          maxPointsDiscount: 'max_points_discount',
           isHot: 'is_hot',
           isActive: 'is_active',
           isShared: 'is_shared',
